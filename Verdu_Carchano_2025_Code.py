@@ -20,13 +20,14 @@ import pandas as pd						# Allows to organize the Data.
 import matplotlib.pyplot as plt         # Allows to work with graphs.
 import statsmodels.formula.api as smf	# Allows to estimate the Econometrical models.
 
+from scipy import stats                 # Allows to apply statistical tests.
+
 #################### START OF COMPLEMENTARY FUNCTIONS ####################
 
 def calculate_stats(data, var_name='NET'):
     """
     Calculate descriptive statistics and hypothesis tests
     """
-    from scipy import stats
     
     values = data[var_name].dropna()
     n = len(values)
@@ -72,10 +73,13 @@ DAT = pd.read_csv('Verdu_Carchano_2025_Data.csv', delimiter = ';') # Open the da
 ### Removing of missing observations ###
 
 DAT = DAT[DAT['NET'] != '-']
+DAT['NET'] = pd.to_numeric(DAT['NET'])  # Convert string to float
 DAT = DAT.reset_index()
 DAT = DAT.drop('index', axis = 1)
 
-### Initialisation of Relevant Variables
+print(DAT)
+
+'''### Initialisation of Relevant Variables
 
 NET, ARB = [], []
 IBE, MCN, MAB, DIN, INS, DIL = [], [], [], [], [], []
@@ -89,31 +93,17 @@ for n in range(0, len(DAT)):
 
 	NET.append(float(DAT['NET'][n]))
 	ARB.append(DAT['ARB'][n])
-	IBE.append(DAT['IBEX'][n])
-	MCN.append(DAT['MC'][n])
-	MAB.append(DAT['MAB'][n])
 	DIN.append(DAT['DIN'][n])
 	INS.append(DAT['INS'][n])
 	DIL.append(float(DAT['DIL'][n]))
-	BAS.append(DAT['BAS'][n])
-	CIC.append(DAT['CIC'][n])
-	CNC.append(DAT['CNC'][n])
-	FIN.append(DAT['FIN'][n])
-	IND.append(DAT['IND'][n])
-	INM.append(DAT['INM'][n])
-	SAL.append(DAT['SAL'][n])
-	TEC.append(DAT['TEC'][n])
-	UTI.append(DAT['UTI'][n])
 	OUT.append(DAT['OUT'][n])
 
 ### Generation of a Dictionary with the complete Sample ###
 
-DATA_O = {'NET': NET, 'ARB': ARB, 'DIL': DIL, 'IBE': IBE, 'MCN': MCN, 'MAB': MAB, 'DIN': DIN, 'INS': INS
-,'BAS': BAS, 'CIC': CIC, 'CNC': CNC, 'FIN': FIN, 'IND': IND, 'INM': INM, 'SAL': SAL, 'TEC': TEC, 'UTI': UTI
-, 'OUT': OUT}
-DATA_O = pd.DataFrame(DATA_O)
+DATA_O = {'NET': NET, 'ARB': ARB, 'DIL': DIL, 'DIN': DIN, 'INS': INS, 'DIL': DIL, 'OUT': OUT}
+DATA_O = pd.DataFrame(DATA_O)'''
 
-DATA_nO = DATA_O[DATA_O['OUT'] == 0] #Removing the atypical returns.
+DATA_nO = DAT[DAT['OUT'] == 0] #Removing the atypical returns.
 
 ### Descriptive Statistics and Statistical Tests ###
 
@@ -179,7 +169,7 @@ print(res_o.summary())
 
 ## Logit Model Estimation - Arbitrage ##
 
-mod_l = smf.logit(FOR_O, DATA_O)
+mod_l = smf.logit(FOR_O, DAT)
 res_l = mod_l.fit(cov_type = 'HC1') #White robustness.
 
 print('##### Resultados del Modelo LOGIT. #####')
@@ -187,7 +177,7 @@ print(res_l.summary())
 
 ## Probit Model Estimation - Arbitrage ##
 
-mod_p = smf.probit(FOR_O, DATA_O)
+mod_p = smf.probit(FOR_O, DAT)
 res_p = mod_p.fit(cov_type = 'HC1') #White robustness.
 
 print('##### Resultados del Modelo PROBIT. #####')
@@ -199,7 +189,7 @@ plt.figure(figsize=(10, 6))
 
 ## Create a copy and map values > 1 to 1.05 (to fall into a ">1" bin) ##
 
-NET_hist = DATA_O['NET'].apply(lambda x: 1.05 if x > 1 else x)
+NET_hist = DAT['NET'].apply(lambda x: 1.05 if x > 1 else x)
 
 bins = np.arange(-1.1, 1.2, 0.1)  # Now includes a bin from 1.0 to 1.1
 n, bins_edges, patches = plt.hist(NET_hist, bins=bins, edgecolor='black')
