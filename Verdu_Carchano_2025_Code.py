@@ -15,16 +15,12 @@
 
 #################### LIBRARIES TO USE ####################
 
-import os
-
 import numpy as np                      # Allows to work with Series.
 import pandas as pd						# Allows to organize the Data.
 import matplotlib.pyplot as plt         # Allows to work with graphs.
 import statsmodels.formula.api as smf	# Allows to estimate the Econometrical models.
 
 from scipy import stats                 # Allows to apply statistical tests.
-
-os.chdir('/Users/manuelverduhenares/Library/CloudStorage/Dropbox/1_Investigación/10_BBDD/2025_Verdu_Carchano')
 
 #################### START OF COMPLEMENTARY FUNCTIONS ####################
 
