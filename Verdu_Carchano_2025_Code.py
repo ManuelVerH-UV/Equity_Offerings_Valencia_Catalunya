@@ -1,3 +1,18 @@
+# ======================================================================================================================================================
+
+# Code for the article Verdú, Carchano (2024). Oportunitats d'Arbitratge a les Ampliacions de Capital a la Comunitat Valenciana i Catañunya.
+# Revista Econòmica de Catalunya. 90, 106.112.
+
+# ======================================================================================================================================================
+
+# To execute this code, you must have file ‘Verdu_Carchano_2025_Data.csv’ available in ‘https://doi.org/10.5281/zenodo.17871082’.
+
+# Once the data is available in the same directory, you only need to execute the code to obtain the results shown in the article.
+
+# The article can be found at: https://hdl.handle.net/10550/102650
+
+# ======================================================================================================================================================
+
 #################### LIBRARIES TO USE ####################
 
 import numpy as np                      # Allows to work with Series.
@@ -53,7 +68,6 @@ def calculate_stats(data, var_name='NET'):
 #################### START OF THE CODE ####################
 
 DAT = pd.read_csv('Verdu_Carchano_2025_Data.csv', delimiter = ';') # Open the data file.
-# Data available at "pending" #
 
 ### Removing of missing observations ###
 
